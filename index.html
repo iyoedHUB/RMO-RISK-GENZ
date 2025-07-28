@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RMO Risk Generator</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+    button, input[type="number"] {
+      margin: 10px;
+      padding: 15px 25px;
+      font-size: 1.2em;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      cursor: pointer;
+      background-color: #B00000;
+      color: white;
+    }
+    button:hover {
+      background-color: #B00000;
+    }
+    textarea {
+      width: 100%;
+      max-width: 900px;
+      height: 300px;
+      font-size: 1.1em;
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      resize: none;
+      margin-top: 20px;
+    }
+    .button-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔐 RMO Risk Genz</h1>
+  <div class="button-container">
+    <input type="number" id="generateCount" value="3" min="1" max="9" title="Jumlah generate" />
+    <button onclick="generateFingerprints()">🔁 Generate</button>
+    <button onclick="copyToClipboard()">📋 Salin ke Clipboard</button>
+  </div>
+  <textarea id="output" readonly></textarea>
+
+  <script>
+    function randomBase64(len) {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+      let result = '';
+      for (let i = 0; i < len; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
+    }
+
+    function generateFingerprint() {
+      const part1 = randomBase64(24);
+      const part2 = randomBase64(88);
+      const part3 = randomBase64(16);
+      const part4 = '08';
+      const part5 = '1';
+      return `${part1}|${part2}|${part3}|${part4}|${part5}`;
+    }
+
+    function generateFingerprints() {
+      const count = parseInt(document.getElementById('generateCount').value) || 10;
+      const output = [];
+      for (let i = 0; i < count; i++) {
+        output.push(generateFingerprint());
+      }
+      document.getElementById('output').value = output.join('\n');
+    }
+
+    function copyToClipboard() {
+      const textarea = document.getElementById('output');
+      textarea.select();
+      textarea.setSelectionRange(0, 99999); // mobile support
+      document.execCommand('copy');
+      alert('✅ Disalin ke clipboard!');
+    }
+  </script>
+</body>
+</html>
